@@ -1,0 +1,75 @@
+
+.btnZoomWarn {
+	background: url(img/icon_lente.png);
+	background-size: 30px 30px;
+    height: 30px;
+    width: 30px;
+	vertical-align: top;
+}
+
+.btnListAdd {
+	background: url(img/button_piu.png);
+	background-size: 30px 30px;
+    height: 30px;
+    width: 30px;
+	vertical-align: bottom;
+}
+
+.btnListRemove {
+	background: url(img/button_meno.png);
+	background-size: 30px 30px;
+    height: 30px;
+    width: 30px;
+	vertical-align: bottom;
+}
+
+.tablePageTitle {
+	background-color: #1f5b84;
+	border-radius: 5px;
+	height: 50px;
+	text-align: center;
+	color: white;
+	font-size: 16px;
+	vertical-align: middle;
+	padding-top: 11px;
+}
+
+div .warnPageHeader {
+	padding: 0px;
+	margin: 0px;
+	border: 0px solid gray;
+}
+
+.warnPageHeader input {
+	margin-top: 10px;
+	padding: 0px;
+	border: 0px solid grey;
+}
+
+#warnTitle {
+	margin-top: 33px;
+	height: 50px;
+}
+
+#WRNMSTR_body a {
+	color: white;
+}
+
+.dynamicListContainer {
+	float: left;
+	margin: 0px;
+}
+
+.warnTextContainer {
+	float: right;
+	margin-right: 10px;
+}
+
+.dynamic-list {
+	padding-left: 0px;
+}
+
+.dynamic-list input {
+	padding: 0px 5px 0px 0px;
+	border: 0px solid grey;
+}

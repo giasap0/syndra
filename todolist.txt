@@ -1,0 +1,6 @@
+1) GETIRE ERRORI - mandare su una generica pagina di errore
+					- log su db
+					- creare numero errore e balbalba
+
+					
+					

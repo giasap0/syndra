@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>projects.drakkar</groupId>
+		<artifactId>drakkar</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    
+    <artifactId>drakkar.ear</artifactId>
+    <name>drakkar-ear</name>
+	<description>Drakkar ear</description>
+	<packaging>ear</packaging>
+	
+    <url>http://maven.apache.org</url>
+    <dependencies>
+		<dependency>
+	      <groupId>projects.drakkar</groupId>
+	      <artifactId>drakkar.web</artifactId>
+	      <version>${project.version}</version>
+	      <type>war</type>
+	    </dependency>
+		<!-- jee -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+        </dependency>
+
+        <!-- log -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+    </dependencies>
+	
+	<build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <version>7</version>
+                    <applicationXml>${basedir}/src/main/application/META-INF/application.xml</applicationXml>
+                    <generateApplicationXml>true</generateApplicationXml>
+                    <skinnyWars>true</skinnyWars>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <encoding>UTF-8</encoding>
+                    <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>drakkar.web</artifactId>
+                            <bundleFileName>drakkar-web.war</bundleFileName>
+                            <contextRoot>/drakkar</contextRoot>
+                        </webModule>
+                    </modules>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-cm-build>${buildNumber}</Implementation-cm-build>
+                            <Implementation-cm-version>${project.version}</Implementation-cm-version>
+                            <Implementation-cm-vendor>Sapo</Implementation-cm-vendor>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+	
+</project>

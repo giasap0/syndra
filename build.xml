@@ -1,0 +1,127 @@
+<project name="drakkar-project" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+    <!-- Include maven jar -->
+    <path id="maven-ant-tasks.classpath" path="ant/lib/maven-ant-tasks-2.1.3.jar" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="maven-ant-tasks.classpath" />
+
+    <!-- init project.dir (the base directory of the project) -->
+    <dirname property="project.dir" file="${ant.file.drakkar-project}"/>
+    <echo>project.dir => ${project.dir}</echo>
+
+    <!-- read environment variables -->
+    <property environment="env"/>
+
+    <!-- load project properties -->
+    <property file="ant/build.properties"/>
+
+    <!-- Overrides defaults properties -->
+    <property file="ant/build.local.properties"/>
+
+    <!-- Build maven package into ear file -->
+    <target name="build" description="Maven install of the artifact">
+        <artifact:mvn fork="true" pom="pom.xml" mavenHome="${env.M2_HOME}">
+            <arg line="clean install -U -T1C"/>
+            <jvmarg value="-Dmaven.multiModuleProjectDirectory=${env.M2_HOME}"/>
+        </artifact:mvn>
+    </target>
+
+    <!-- Deploys artifact into deploy dir -->
+    <target name="deploy" description="Deploys application artifacts" >
+		<echo>deployment.dir => ${deployment.dir}</echo>
+        <mkdir dir="${deployment.dir}" />
+        <copy file="${artifact.dir}/${artifact.filename}" todir="${deployment.dir}"/>
+
+        <touch file="${deployment.dir}/${artifact.filename}.dodeploy"/>		
+    </target>
+
+    <!-- Removes deployed artifacts -->
+    <target name="undeploy" description="Undeploy application artifacts">
+        <delete failonerror="false" file="${deployment.dir}/${artifact.filename}" />
+        <delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${deployment.dir}" includes="**/**.failed" />
+			<fileset dir="${deployment.dir}" includes="**/**.dodeploy" />
+			<fileset dir="${deployment.dir}" includes="**/**.ear" />
+			<fileset dir="${deployment.dir}" includes="**/**.war" />
+			<fileset dir="${deployment.dir}" includes="**/**.jar" />
+			<fileset dir="${deployment.dir}" includes="**/**.xml" />
+        </delete>
+    </target>
+
+    <!-- Copies configuration file -->
+    <target name="cpy.config" description="Copy configuration server file">
+        <copy file="${configuration.dir}/${srv.conf.file}" overwrite="true" todir="${srv.conf.dir}"/>
+    </target>
+	
+	<target name="deploy.config" description="deploy configuration">
+        <copy overwrite="true" todir="${deployment.dir}" flatten="true">
+			<fileset dir="${deploy.config.dir}" />
+		</copy>
+    </target>
+
+    <!-- =============================================
+        application server
+		============================================= -->
+	
+	<target name="srv.info" >
+		<echo>deployment.dir => ${deployment.dir}</echo>
+		<echo>srv.conf.dir => ${srv.conf.dir}</echo>
+		<echo>srv.launcher => ${srv.launcher}</echo>
+		<echo>srv.conf.file => ${configuration.dir}/${srv.conf.file}</echo>
+		<echo>project.deployed.configuration.dir => ${deploy.config.dir}</echo>
+		<echo>srv.debug-port => ${srv.debug-port}</echo>
+		<echo>srv.admin-port => ${srv.admin-port}</echo>
+		<echo>srv.log.dir => ${srv.log.dir}</echo>
+	</target>
+
+    <target name="srv.start" description="Starts application server" depends="">
+        <exec executable="${srv.launcher}" dir="${srv.home}">
+            <!-- config file -->
+            <arg line="--server-config=${srv.conf.file}"/>
+            <!-- properties used in standalone.xml -->
+            <arg value="-Dproject.dir=${project.dir}"/>
+            <!-- port offset -->
+            <arg value="-Djboss.socket.binding.port-offset=${srv.port-offset}"/>
+        </exec>
+    </target>
+
+    <target name="srv.debug" description="Starts application server in debug mode" depends="">
+        <exec executable="${srv.launcher}" dir="${srv.home}">
+            <!-- config file -->
+            <arg line="--server-config=${srv.conf.file}"/>
+            <!-- properties used in standalone.xml -->
+            <arg value="-Dproject.dir=${project.dir}"/>
+            <!-- port offset -->
+            <arg value="-Djboss.socket.binding.port-offset=${srv.port-offset}"/>
+            <!-- debug -->
+            <arg line="--debug ${srv.debug-port}"/>
+			
+			<arg line="-b 0.0.0.0"/>
+			<arg line="-Djboss.server.log.dir=${srv.log.dir}"/>
+			
+        </exec>
+    </target>
+
+    <target name="srv.stop" description="Stop application server" depends="">
+        <exec executable="${srv.cli}" dir="${srv.home}">
+            <arg line="--controller=localhost:${srv.admin-port} --connect command=:shutdown"/>
+        </exec>
+        <echo>"================================================================"</echo>
+        <tstamp>
+            <format property="TODAY_IT" pattern="HH:mm:ss zzz" locale="it,IT"/>
+        </tstamp>
+        <echo>End time: ${TODAY_IT}</echo>
+    </target>
+	
+	<target name="clean.start" description="deploy and start server" depends="">
+		<antcall target="srv.info" />
+		<echo>"================================================================"</echo>
+		<antcall target="undeploy" />
+		<antcall target="cpy.config" />
+		<antcall target="deploy.config" />
+		<antcall target="deploy" />
+		<antcall target="srv.debug" />
+	</target>
+	
+</project>

@@ -1,0 +1,92 @@
+
+CREATE TABLE TSYSTEMPROP (
+  ID_SYSPROP bigint(20) NOT NULL AUTO_INCREMENT,
+  PARAM varchar(30) NOT NULL,
+  VAL varchar(60) DEFAULT NULL,
+  TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  TSTART timestamp NULL DEFAULT NULL,
+  TEND timestamp NULL DEFAULT NULL,
+  constraint pk_systemprop PRIMARY KEY (ID_SYSPROP),
+  UNIQUE KEY U_SYSPROP (PARAM)
+);
+
+CREATE TABLE TUSER (
+	ID_USER bigint(20) NOT NULL AUTO_INCREMENT,
+	USER_CODE varchar(50) not null,
+	NAME varchar(25) not null,
+	PASSWORD varchar(30) not null,
+	TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	IS_ENABLED int(1) not null default 1,
+	constraint pk_user PRIMARY KEY (ID_USER),
+	UNIQUE KEY U_USR (USER_CODE),
+	UNIQUE KEY U_USR_NAME (NAME)
+);
+
+create table TUSER_ROLE (
+	ID_ROLE bigint(20) NOT NULL AUTO_INCREMENT,
+	code varchar(10) not null,
+	description varchar(60),
+	constraint pk_role PRIMARY KEY (ID_ROLE),
+	UNIQUE KEY U_USRROLE (CODE)
+);
+
+create table REL_USER_ROLE (
+	ID_USER bigint(20) NOT NULL,
+	ID_ROLE bigint(20) NOT NULL,
+	TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	TSTART timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+	TEND timestamp NULL DEFAULT NULL,
+	unique KEY u_usr_role (ID_USER,ID_ROLE),
+	constraint usrRole_fk_usr FOREIGN KEY (ID_USER) REFERENCES TUSER(ID_USER),
+	constraint usrRole_fk_role FOREIGN KEY (ID_ROLE) REFERENCES TUSER_ROLE(ID_ROLE)
+);
+
+create table TTIPIPRODOTTO (
+	ID_TIPO_PROD bigint(20) NOT null AUTO_INCREMENT,
+	CODICE varchar(10) not null,
+	DESCRIZIONE varchar(50) not null,
+	constraint pk_tpprodotto PRIMARY KEY (ID_TIPO_PROD)
+);
+
+create table TWARNING (
+	ID_WARNING bigint(20) NOT null AUTO_INCREMENT,
+	TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	TSTART timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+	TEND timestamp NULL DEFAULT NULL,
+	TITOLO varchar(100),
+	ID_USER_INSERT bigint(20) NOT NULL,
+	NOTIFICANTE varchar(100),
+	PRODUTTORE varchar(100),
+	WARN_DATE DATE,
+	ID_TIPO_PROD bigint(20),
+	MOTIVO varchar(100),
+	DENOMINAZIONE_VENDITA varchar(100),
+	CODICE_PRODOTTO varchar(20),
+	CODICE_EAN varchar(20),
+	MODO_CONSERVAZIONE varchar(50),
+	NOTE varchar(1200),
+	constraint pk_wrnng PRIMARY KEY (ID_WARNING),
+	constraint wrn_fk_usr FOREIGN KEY (ID_USER_INSERT) REFERENCES TUSER(ID_USER),
+	constraint wrn_fk_tpprd FOREIGN KEY (ID_TIPO_PROD) REFERENCES TTIPIPRODOTTO(ID_TIPO_PROD)
+);
+
+create table TWARNINGLIST_LOTTI (
+	ID_WRNLST bigint(20) NOT null AUTO_INCREMENT,
+	ID_WARNING bigint(20) NOT NULL,
+	TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CODICE_LOTTO varchar(50),
+	DATA_SCADENZA DATE,
+	constraint pk_wrnnglst PRIMARY KEY (ID_WRNLST),
+	constraint wrnlst_fk_wrn FOREIGN KEY (ID_WARNING) REFERENCES TWARNING(ID_WARNING)
+);
+
+create table THANDLEDWARN (
+	ID_USER bigint(20) NOT NULL,
+	ID_WRNLST bigint(20) NOT null,
+	TINSERT timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	LOT_NUMBER int(10) not null,
+	Message varchar(200),
+	unique KEY u_hndlwrn (ID_USER,ID_WRNLST),
+	constraint hndlwrn_fk_usr FOREIGN KEY (ID_USER) REFERENCES TUSER(ID_USER),
+	constraint hndlwrn_fk_wrnglst FOREIGN KEY (ID_WRNLST) REFERENCES TWARNINGLIST_LOTTI(ID_WRNLST)
+);

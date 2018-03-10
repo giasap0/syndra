@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="drakkar.logging.configuration">
+    <Properties>
+        <Property name="filename_generic_log">standalone/log/drakkar-generic.log</Property>
+        <Property name="filename_drakkar_log">standalone/log/drakkar-app.log</Property>
+        <Property name="filename_drakkar_errors_log">standalone/log/drakkar-app-errors.log</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n"/>
+            <filters>
+                <MarkerFilter marker="FLOW" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+        </Console>
+        <File name="FILE_LOG" fileName="${filename_drakkar_log}" >
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n" />
+        </File>
+        <File name="FILE_ERROR_LOG" fileName="${filename_drakkar_errors_log}" >
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n" />
+        </File>
+        <File name="FILE_GENERIC_LOG" fileName="${filename_generic_log}" append="true" >
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+
+        <Logger name="com" level="ERROR" additivity="true" >
+            <AppenderRef ref="Console" level="error"/>
+            <AppenderRef ref="FILE_ERROR_LOG" level="error"/>
+        </Logger>
+        <Logger name="com.sapo.drakkar" level="DEBUG" additivity="false" >
+            <AppenderRef ref="FILE_LOG" level="debug"/>
+        </Logger>
+
+        <Root level="DEBUG" additivity="false">
+            <AppenderRef ref="FILE_GENERIC_LOG" level="debug"/>
+        </Root>
+
+    </Loggers>
+</Configuration>

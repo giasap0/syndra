@@ -1,0 +1,29 @@
+
+
+<div class="page-header">
+    <div>
+        <button onclick="headerUsrLogout()" class="btnUsrLogout" ></button>
+        <p id="usernameContainer" >usr</p>
+        <p class ="clear"> </p>
+    </div>
+</div>
+<div class="dataTableContainer">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-WRNMSTR" >Master</a></li>
+            <!--<li><a href="#tabs-WRNCONS" >Filiale</a></li>-->
+        </ul>
+        <div id="tabs-WRNMSTR">
+            contenuto del tab
+        </div>
+    </div>
+</div>
+
+<script>
+$( function() {
+	$("#tabs").tabs();
+	warningMasterCTRL.load();
+	headerHandler.setUsername();
+	}
+);
+</script>

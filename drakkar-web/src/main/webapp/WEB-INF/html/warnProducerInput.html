@@ -1,0 +1,38 @@
+
+<div class="warnPageHeader">
+    <input type="text" id="warnTitle" value="" placeholder="titolo" style="width:70%;" /><br>
+    Notificante: <input type="text" id="warnNotificante" value="" placeholder="assicuratore qualità"/><br>
+    Produttore: <input type="text" id="warnLottiProduttore" value="" placeholder="nome società" />
+    Segnalato il: <input type="text" id="warnDate" class="datePicker" value="" placeholder="data"/><br>
+    Motivo del ritiro: <input type="text" id="warnMotivoRitiro" value="" placeholder="" /><br>
+    <hr>
+    Denominazione di Vendita: <input type="text" id="warnNomeProdotto" value="" placeholder="prodotto x" /><br>
+    Codice Prodotto: <input type="text" id="warnProductCode" value="" placeholder="123456" />
+    Codice EAN: <input type="text" id="warnEANCode" value="" placeholder="123456" /><br>
+    Tipo Prodotto: <p id="warnTipoProdContainer" class="selectContainer"></p>
+    Modalità di Conservazione: <input type="text" id="warnTemperature" value="" placeholder="4°C" /><br>
+</div>
+
+<div class="dynamicListContainer" >
+    <hr>
+    Lotti: <br>
+    <ul id="rootDynamicList" class="dynamic-list">
+    </ul>
+</div>
+<div class="warnTextContainer" >
+    <label for="warnNotes">Note Aggiuntive:</label><br>
+    <textarea name="warnNotes" id="warnNotes" cols="30" rows="10">
+    </textarea>
+</div>
+<p class="clear"></p>
+<div style="text-align:center;">
+    <a class="btn btn-primary btn-large btn-block" href="#">Invia</a>
+</div>
+
+<script>
+    $( function() {
+        activateDatePicker();
+    });
+    dynamicListHandler.addItem();
+    tipiProdSelectHandler.createSelect();
+</script>

@@ -1,0 +1,61 @@
+
+button {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.page-header {
+	background-color: #1f5b84;
+	margin: 10px auto;
+	padding: 10px;
+	border-radius: 5px;
+	height: 100px;
+}
+.page-header div {
+	margin-top: 5px;
+	padding 0px;
+	/* float: right; */
+}
+.page-header p {
+    float: right;
+	display: inline-block;
+	color: white;
+	margin: 0px 25px 0px 0px;
+	height: 30px;
+	padding-top: 8px;
+}
+.page-header button {
+	float: right;
+	margin: 0px;
+}
+
+.btnUsrLogout {
+	background: url(img/icon_logoff.png);
+	background-size: 30px 30px;
+    height: 30px;
+    width: 30px;
+}
+
+.dataTableContainer {
+    background-color: #FFF;
+    padding: 0px;
+    border: 0px;
+    border-radius: 5px
+}
+
+textarea {
+   resize: none;
+   font-size: 0.6 em;
+}
+
+.selectContainer {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    border: 0px solid grey;
+}

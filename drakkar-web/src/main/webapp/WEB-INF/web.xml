@@ -1,0 +1,20 @@
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
+
+    <welcome-file-list>
+        <welcome-file>html/pageContainer.html</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <!-- Missing login -->
+        <error-code>401</error-code>
+        <location>html/pageContainer.html</location>
+    </error-page>
+    <error-page>
+        <location>html/pageContainer.html</location>
+    </error-page>
+
+</web-app>
